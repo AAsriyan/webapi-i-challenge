@@ -7,7 +7,12 @@ export class UserList extends Component {
       <div>
         <h2>UserList</h2>
         {this.props.users.map(user => (
-          <User user={user} key={user.id} />
+          <User
+            user={user}
+            key={user.id}
+            deleteUser={this.props.deleteUser}
+            getUsers={this.props.getUsers}
+          />
         ))}
       </div>
     );

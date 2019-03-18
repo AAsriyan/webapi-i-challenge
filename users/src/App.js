@@ -11,6 +11,10 @@ class App extends Component {
   };
 
   componentDidMount = () => {
+    this.getUsers();
+  };
+
+  getUsers = () => {
     axios
       .get("http://localhost:4000/api/users")
       .then(res => {
@@ -36,12 +40,7 @@ class App extends Component {
       .post("http://localhost:4000/api/users", newUser)
       .then(res => {
         console.log(res);
-        axios
-          .get("http://localhost:4000/api/users")
-          .then(res => {
-            this.setState({ users: res.data });
-          })
-          .catch(err => console.log(err));
+        this.getUsers();
       })
       .catch(err => console.log(err));
 
@@ -53,13 +52,28 @@ class App extends Component {
 
   deleteUser = (e, id) => {
     e.preventDefault();
+
+    axios.delete(`http://localhost:4000/api/users/${id}`).then(res => {
+      console.log(res);
+      this.getUsers();
+    });
+  };
+
+  updateUser = (e, id) => {
+    e.preventDefault();
+
+    axios.put(`http://localhost:4000/api/users/${id}`);
   };
 
   render() {
     return (
       <div className="App">
         <h1>App works</h1>
-        <UserList users={this.state.users} />
+        <UserList
+          users={this.state.users}
+          getUsers={this.getUsers}
+          deleteUser={this.deleteUser}
+        />
         <form onSubmit={this.addUser}>
           <input
             type="text"
